@@ -1,0 +1,6 @@
+Objects/
+*.uv*
+*.bin
+*.hex
+build
+.dep

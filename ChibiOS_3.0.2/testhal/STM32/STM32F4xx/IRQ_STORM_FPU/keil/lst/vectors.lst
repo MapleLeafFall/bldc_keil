@@ -1,0 +1,2135 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         #line   1                "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\compilers\\RVCT\\vectors.s"
+    1 00000000         
+    2 00000000         
+    3 00000000         
+    4 00000000         
+    5 00000000         
+    6 00000000         
+    7 00000000         
+    8 00000000         
+    9 00000000         
+   10 00000000         
+   11 00000000         
+   12 00000000         
+   13 00000000         
+   14 00000000         
+   15 00000000         
+   16 00000000         
+   17 00000000         
+   18 00000000         
+   19 00000000         
+   20 00000000         
+   21 00000000         
+   22 00000000         
+   23 00000000         
+   24 00000000         
+   25 00000000         
+   26 00000000         
+   27 00000000         
+   28 00000000         #line   1                "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\devices\\STM32F4xx\\cmparams.h"
+    1 00000000         
+    2 00000000         
+    3 00000000         
+    4 00000000         
+    5 00000000         
+    6 00000000         
+    7 00000000         
+    8 00000000         
+    9 00000000         
+   10 00000000         
+   11 00000000         
+   12 00000000         
+   13 00000000         
+   14 00000000         
+   15 00000000         
+   16 00000000         
+   17 00000000         
+   18 00000000         
+   19 00000000         
+   20 00000000         
+   21 00000000         
+   22 00000000         
+   23 00000000         
+   24 00000000         
+   25 00000000         
+   26 00000000         
+   27 00000000         
+   28 00000000         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   29 00000000         
+   30 00000000         
+   31 00000000         
+   32 00000000         
+   33 00000000         
+   34 00000000         
+   35 00000000         
+   36 00000000         
+   37 00000000         
+   38 00000000         
+   39 00000000         
+   40 00000000         
+   41 00000000         
+   42 00000000         
+   43 00000000         
+   44 00000000         
+   45 00000000         
+   46 00000000         
+   47 00000000         
+   48 00000000         
+   49 00000000         
+   50 00000000         
+   51 00000000         
+   52 00000000         
+   53 00000000         
+   54 00000000         
+   55 00000000         
+   56 00000000         
+   57 00000000         
+   58 00000000         #line   90               "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\devices\\STM32F4xx\\cmparams.h"
+   90 00000000         
+   91 00000000         
+   92 00000000         
+   93 00000000         
+   94 00000000         #line   30               "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\compilers\\RVCT\\vectors.s"
+   30 00000000         
+   31 00000000         
+   32 00000000         
+   33 00000000         
+   34 00000000         
+   35 00000000         
+   36 00000000         
+   37 00000000         
+   38 00000000         
+   39 00000000         
+   40 00000000         
+   41 00000000                 PRESERVE8
+   42 00000000         
+   43 00000000                 AREA             RESET, DATA, READONLY
+   44 00000000         
+   45 00000000                 IMPORT           __initial_msp
+   46 00000000                 IMPORT           Reset_Handler
+   47 00000000                 EXPORT           __Vectors
+   48 00000000         
+   49 00000000         __Vectors
+   50 00000000 00000000        DCD              __initial_msp
+   51 00000004 00000000        DCD              Reset_Handler
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   52 00000008 00000000        DCD              NMI_Handler
+   53 0000000C 00000000        DCD              HardFault_Handler
+   54 00000010 00000000        DCD              MemManage_Handler
+   55 00000014 00000000        DCD              BusFault_Handler
+   56 00000018 00000000        DCD              UsageFault_Handler
+   57 0000001C 00000000        DCD              Vector1C
+   58 00000020 00000000        DCD              Vector20
+   59 00000024 00000000        DCD              Vector24
+   60 00000028 00000000        DCD              Vector28
+   61 0000002C 00000000        DCD              SVC_Handler
+   62 00000030 00000000        DCD              DebugMon_Handler
+   63 00000034 00000000        DCD              Vector34
+   64 00000038 00000000        DCD              PendSV_Handler
+   65 0000003C 00000000        DCD              SysTick_Handler
+   66 00000040 00000000        DCD              Vector40
+   67 00000044 00000000        DCD              Vector44
+   68 00000048 00000000        DCD              Vector48
+   69 0000004C 00000000        DCD              Vector4C
+   70 00000050 00000000        DCD              Vector50
+   71 00000054 00000000        DCD              Vector54
+   72 00000058 00000000        DCD              Vector58
+   73 0000005C 00000000        DCD              Vector5C
+   74 00000060         
+   75 00000060 00000000        DCD              Vector60
+   76 00000064 00000000        DCD              Vector64
+   77 00000068 00000000        DCD              Vector68
+   78 0000006C 00000000        DCD              Vector6C
+   79 00000070 00000000        DCD              Vector70
+   80 00000074 00000000        DCD              Vector74
+   81 00000078 00000000        DCD              Vector78
+   82 0000007C 00000000        DCD              Vector7C
+   83 00000080         
+   84 00000080         
+   85 00000080 00000000        DCD              Vector80
+   86 00000084 00000000        DCD              Vector84
+   87 00000088 00000000        DCD              Vector88
+   88 0000008C 00000000        DCD              Vector8C
+   89 00000090 00000000        DCD              Vector90
+   90 00000094 00000000        DCD              Vector94
+   91 00000098 00000000        DCD              Vector98
+   92 0000009C 00000000        DCD              Vector9C
+   93 000000A0         
+   94 000000A0         
+   95 000000A0 00000000        DCD              VectorA0
+   96 000000A4 00000000        DCD              VectorA4
+   97 000000A8 00000000        DCD              VectorA8
+   98 000000AC 00000000        DCD              VectorAC
+   99 000000B0 00000000        DCD              VectorB0
+  100 000000B4 00000000        DCD              VectorB4
+  101 000000B8 00000000        DCD              VectorB8
+  102 000000BC 00000000        DCD              VectorBC
+  103 000000C0         
+  104 000000C0         
+  105 000000C0 00000000        DCD              VectorC0
+  106 000000C4 00000000        DCD              VectorC4
+  107 000000C8 00000000        DCD              VectorC8
+  108 000000CC 00000000        DCD              VectorCC
+  109 000000D0 00000000        DCD              VectorD0
+  110 000000D4 00000000        DCD              VectorD4
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  111 000000D8 00000000        DCD              VectorD8
+  112 000000DC 00000000        DCD              VectorDC
+  113 000000E0         
+  114 000000E0         
+  115 000000E0 00000000        DCD              VectorE0
+  116 000000E4 00000000        DCD              VectorE4
+  117 000000E8 00000000        DCD              VectorE8
+  118 000000EC 00000000        DCD              VectorEC
+  119 000000F0 00000000        DCD              VectorF0
+  120 000000F4 00000000        DCD              VectorF4
+  121 000000F8 00000000        DCD              VectorF8
+  122 000000FC 00000000        DCD              VectorFC
+  123 00000100         
+  124 00000100         
+  125 00000100 00000000        DCD              Vector100
+  126 00000104 00000000        DCD              Vector104
+  127 00000108 00000000        DCD              Vector108
+  128 0000010C 00000000        DCD              Vector10C
+  129 00000110 00000000        DCD              Vector110
+  130 00000114 00000000        DCD              Vector114
+  131 00000118 00000000        DCD              Vector118
+  132 0000011C 00000000        DCD              Vector11C
+  133 00000120         
+  134 00000120         
+  135 00000120 00000000        DCD              Vector120
+  136 00000124 00000000        DCD              Vector124
+  137 00000128 00000000        DCD              Vector128
+  138 0000012C 00000000        DCD              Vector12C
+  139 00000130 00000000        DCD              Vector130
+  140 00000134 00000000        DCD              Vector134
+  141 00000138 00000000        DCD              Vector138
+  142 0000013C 00000000        DCD              Vector13C
+  143 00000140         
+  144 00000140         
+  145 00000140 00000000        DCD              Vector140
+  146 00000144 00000000        DCD              Vector144
+  147 00000148 00000000        DCD              Vector148
+  148 0000014C 00000000        DCD              Vector14C
+  149 00000150 00000000        DCD              Vector150
+  150 00000154 00000000        DCD              Vector154
+  151 00000158 00000000        DCD              Vector158
+  152 0000015C 00000000        DCD              Vector15C
+  153 00000160         
+  154 00000160         
+  155 00000160 00000000        DCD              Vector160
+  156 00000164 00000000        DCD              Vector164
+  157 00000168 00000000        DCD              Vector168
+  158 0000016C 00000000        DCD              Vector16C
+  159 00000170 00000000        DCD              Vector170
+  160 00000174 00000000        DCD              Vector174
+  161 00000178 00000000        DCD              Vector178
+  162 0000017C 00000000        DCD              Vector17C
+  163 00000180         
+  164 00000180         
+  165 00000180 00000000        DCD              Vector180
+  166 00000184 00000000        DCD              Vector184
+  167 00000188 00000000        DCD              Vector188
+  168 0000018C 00000000        DCD              Vector18C
+  169 00000190 00000000        DCD              Vector190
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  170 00000194 00000000        DCD              Vector194
+  171 00000198 00000000        DCD              Vector198
+  172 0000019C 00000000        DCD              Vector19C
+  173 000001A0         
+  174 000001A0         
+  175 000001A0 00000000        DCD              Vector1A0
+  176 000001A4 00000000        DCD              Vector1A4
+  177 000001A8 00000000        DCD              Vector1A8
+  178 000001AC 00000000        DCD              Vector1AC
+  179 000001B0 00000000        DCD              Vector1B0
+  180 000001B4 00000000        DCD              Vector1B4
+  181 000001B8 00000000        DCD              Vector1B8
+  182 000001BC 00000000        DCD              Vector1BC
+  183 000001C0         #line   364              "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\compilers\\RVCT\\vectors.s"
+  364 000001C0         
+  365 000001C0                 AREA             |.text|, CODE, READONLY
+  366 00000000                 THUMB
+  367 00000000         
+  368 00000000         
+  369 00000000         
+  370 00000000         
+  371 00000000                 EXPORT           _unhandled_exception
+  372 00000000         _unhandled_exception
+                               PROC
+  373 00000000                 EXPORT           NMI_Handler             [WEAK]
+  374 00000000                 EXPORT           HardFault_Handler       [WEAK]
+  375 00000000                 EXPORT           MemManage_Handler       [WEAK]
+  376 00000000                 EXPORT           BusFault_Handler        [WEAK]
+  377 00000000                 EXPORT           UsageFault_Handler      [WEAK]
+  378 00000000                 EXPORT           Vector1C                [WEAK]
+  379 00000000                 EXPORT           Vector20                [WEAK]
+  380 00000000                 EXPORT           Vector24                [WEAK]
+  381 00000000                 EXPORT           Vector28                [WEAK]
+  382 00000000                 EXPORT           SVC_Handler             [WEAK]
+  383 00000000                 EXPORT           DebugMon_Handler        [WEAK]
+  384 00000000                 EXPORT           Vector34                [WEAK]
+  385 00000000                 EXPORT           PendSV_Handler          [WEAK]
+  386 00000000                 EXPORT           SysTick_Handler         [WEAK]
+  387 00000000                 EXPORT           Vector40                [WEAK]
+  388 00000000                 EXPORT           Vector44                [WEAK]
+  389 00000000                 EXPORT           Vector48                [WEAK]
+  390 00000000                 EXPORT           Vector4C                [WEAK]
+  391 00000000                 EXPORT           Vector50                [WEAK]
+  392 00000000                 EXPORT           Vector54                [WEAK]
+  393 00000000                 EXPORT           Vector58                [WEAK]
+  394 00000000                 EXPORT           Vector5C                [WEAK]
+  395 00000000         
+  396 00000000                 EXPORT           Vector60                [WEAK]
+  397 00000000                 EXPORT           Vector64                [WEAK]
+  398 00000000                 EXPORT           Vector68                [WEAK]
+  399 00000000                 EXPORT           Vector6C                [WEAK]
+  400 00000000                 EXPORT           Vector70                [WEAK]
+  401 00000000                 EXPORT           Vector74                [WEAK]
+  402 00000000                 EXPORT           Vector78                [WEAK]
+  403 00000000                 EXPORT           Vector7C                [WEAK]
+  404 00000000         
+  405 00000000         
+  406 00000000                 EXPORT           Vector80                [WEAK]
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  407 00000000                 EXPORT           Vector84                [WEAK]
+  408 00000000                 EXPORT           Vector88                [WEAK]
+  409 00000000                 EXPORT           Vector8C                [WEAK]
+  410 00000000                 EXPORT           Vector90                [WEAK]
+  411 00000000                 EXPORT           Vector94                [WEAK]
+  412 00000000                 EXPORT           Vector98                [WEAK]
+  413 00000000                 EXPORT           Vector9C                [WEAK]
+  414 00000000         
+  415 00000000         
+  416 00000000                 EXPORT           VectorA0                [WEAK]
+  417 00000000                 EXPORT           VectorA4                [WEAK]
+  418 00000000                 EXPORT           VectorA8                [WEAK]
+  419 00000000                 EXPORT           VectorAC                [WEAK]
+  420 00000000                 EXPORT           VectorB0                [WEAK]
+  421 00000000                 EXPORT           VectorB4                [WEAK]
+  422 00000000                 EXPORT           VectorB8                [WEAK]
+  423 00000000                 EXPORT           VectorBC                [WEAK]
+  424 00000000         
+  425 00000000         
+  426 00000000                 EXPORT           VectorC0                [WEAK]
+  427 00000000                 EXPORT           VectorC4                [WEAK]
+  428 00000000                 EXPORT           VectorC8                [WEAK]
+  429 00000000                 EXPORT           VectorCC                [WEAK]
+  430 00000000                 EXPORT           VectorD0                [WEAK]
+  431 00000000                 EXPORT           VectorD4                [WEAK]
+  432 00000000                 EXPORT           VectorD8                [WEAK]
+  433 00000000                 EXPORT           VectorDC                [WEAK]
+  434 00000000         
+  435 00000000         
+  436 00000000                 EXPORT           VectorE0                [WEAK]
+  437 00000000                 EXPORT           VectorE4                [WEAK]
+  438 00000000                 EXPORT           VectorE8                [WEAK]
+  439 00000000                 EXPORT           VectorEC                [WEAK]
+  440 00000000                 EXPORT           VectorF0                [WEAK]
+  441 00000000                 EXPORT           VectorF4                [WEAK]
+  442 00000000                 EXPORT           VectorF8                [WEAK]
+  443 00000000                 EXPORT           VectorFC                [WEAK]
+  444 00000000         
+  445 00000000         
+  446 00000000                 EXPORT           Vector100               [WEAK]
+  447 00000000                 EXPORT           Vector104               [WEAK]
+  448 00000000                 EXPORT           Vector108               [WEAK]
+  449 00000000                 EXPORT           Vector10C               [WEAK]
+  450 00000000                 EXPORT           Vector110               [WEAK]
+  451 00000000                 EXPORT           Vector114               [WEAK]
+  452 00000000                 EXPORT           Vector118               [WEAK]
+  453 00000000                 EXPORT           Vector11C               [WEAK]
+  454 00000000         
+  455 00000000         
+  456 00000000                 EXPORT           Vector120               [WEAK]
+  457 00000000                 EXPORT           Vector124               [WEAK]
+  458 00000000                 EXPORT           Vector128               [WEAK]
+  459 00000000                 EXPORT           Vector12C               [WEAK]
+  460 00000000                 EXPORT           Vector130               [WEAK]
+  461 00000000                 EXPORT           Vector134               [WEAK]
+  462 00000000                 EXPORT           Vector138               [WEAK]
+  463 00000000                 EXPORT           Vector13C               [WEAK]
+  464 00000000         
+  465 00000000         
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  466 00000000                 EXPORT           Vector140               [WEAK]
+  467 00000000                 EXPORT           Vector144               [WEAK]
+  468 00000000                 EXPORT           Vector148               [WEAK]
+  469 00000000                 EXPORT           Vector14C               [WEAK]
+  470 00000000                 EXPORT           Vector150               [WEAK]
+  471 00000000                 EXPORT           Vector154               [WEAK]
+  472 00000000                 EXPORT           Vector158               [WEAK]
+  473 00000000                 EXPORT           Vector15C               [WEAK]
+  474 00000000         
+  475 00000000         
+  476 00000000                 EXPORT           Vector160               [WEAK]
+  477 00000000                 EXPORT           Vector164               [WEAK]
+  478 00000000                 EXPORT           Vector168               [WEAK]
+  479 00000000                 EXPORT           Vector16C               [WEAK]
+  480 00000000                 EXPORT           Vector170               [WEAK]
+  481 00000000                 EXPORT           Vector174               [WEAK]
+  482 00000000                 EXPORT           Vector178               [WEAK]
+  483 00000000                 EXPORT           Vector17C               [WEAK]
+  484 00000000         
+  485 00000000         
+  486 00000000                 EXPORT           Vector180               [WEAK]
+  487 00000000                 EXPORT           Vector184               [WEAK]
+  488 00000000                 EXPORT           Vector188               [WEAK]
+  489 00000000                 EXPORT           Vector18C               [WEAK]
+  490 00000000                 EXPORT           Vector190               [WEAK]
+  491 00000000                 EXPORT           Vector194               [WEAK]
+  492 00000000                 EXPORT           Vector198               [WEAK]
+  493 00000000                 EXPORT           Vector19C               [WEAK]
+  494 00000000         
+  495 00000000         
+  496 00000000                 EXPORT           Vector1A0               [WEAK]
+  497 00000000                 EXPORT           Vector1A4               [WEAK]
+  498 00000000                 EXPORT           Vector1A8               [WEAK]
+  499 00000000                 EXPORT           Vector1AC               [WEAK]
+  500 00000000                 EXPORT           Vector1B0               [WEAK]
+  501 00000000                 EXPORT           Vector1B4               [WEAK]
+  502 00000000                 EXPORT           Vector1B8               [WEAK]
+  503 00000000                 EXPORT           Vector1BC               [WEAK]
+  504 00000000         #line   685              "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\compilers\\RVCT\\vectors.s"
+  685 00000000         
+  686 00000000         NMI_Handler
+  687 00000000         HardFault_Handler
+  688 00000000         MemManage_Handler
+  689 00000000         BusFault_Handler
+  690 00000000         UsageFault_Handler
+  691 00000000         Vector1C
+  692 00000000         Vector20
+  693 00000000         Vector24
+  694 00000000         Vector28
+  695 00000000         SVC_Handler
+  696 00000000         DebugMon_Handler
+  697 00000000         Vector34
+  698 00000000         PendSV_Handler
+  699 00000000         SysTick_Handler
+  700 00000000         Vector40
+  701 00000000         Vector44
+  702 00000000         Vector48
+  703 00000000         Vector4C
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  704 00000000         Vector50
+  705 00000000         Vector54
+  706 00000000         Vector58
+  707 00000000         Vector5C
+  708 00000000         
+  709 00000000         Vector60
+  710 00000000         Vector64
+  711 00000000         Vector68
+  712 00000000         Vector6C
+  713 00000000         Vector70
+  714 00000000         Vector74
+  715 00000000         Vector78
+  716 00000000         Vector7C
+  717 00000000         
+  718 00000000         
+  719 00000000         Vector80
+  720 00000000         Vector84
+  721 00000000         Vector88
+  722 00000000         Vector8C
+  723 00000000         Vector90
+  724 00000000         Vector94
+  725 00000000         Vector98
+  726 00000000         Vector9C
+  727 00000000         
+  728 00000000         
+  729 00000000         VectorA0
+  730 00000000         VectorA4
+  731 00000000         VectorA8
+  732 00000000         VectorAC
+  733 00000000         VectorB0
+  734 00000000         VectorB4
+  735 00000000         VectorB8
+  736 00000000         VectorBC
+  737 00000000         
+  738 00000000         
+  739 00000000         VectorC0
+  740 00000000         VectorC4
+  741 00000000         VectorC8
+  742 00000000         VectorCC
+  743 00000000         VectorD0
+  744 00000000         VectorD4
+  745 00000000         VectorD8
+  746 00000000         VectorDC
+  747 00000000         
+  748 00000000         
+  749 00000000         VectorE0
+  750 00000000         VectorE4
+  751 00000000         VectorE8
+  752 00000000         VectorEC
+  753 00000000         VectorF0
+  754 00000000         VectorF4
+  755 00000000         VectorF8
+  756 00000000         VectorFC
+  757 00000000         
+  758 00000000         
+  759 00000000         Vector100
+  760 00000000         Vector104
+  761 00000000         Vector108
+  762 00000000         Vector10C
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  763 00000000         Vector110
+  764 00000000         Vector114
+  765 00000000         Vector118
+  766 00000000         Vector11C
+  767 00000000         
+  768 00000000         
+  769 00000000         Vector120
+  770 00000000         Vector124
+  771 00000000         Vector128
+  772 00000000         Vector12C
+  773 00000000         Vector130
+  774 00000000         Vector134
+  775 00000000         Vector138
+  776 00000000         Vector13C
+  777 00000000         
+  778 00000000         
+  779 00000000         Vector140
+  780 00000000         Vector144
+  781 00000000         Vector148
+  782 00000000         Vector14C
+  783 00000000         Vector150
+  784 00000000         Vector154
+  785 00000000         Vector158
+  786 00000000         Vector15C
+  787 00000000         
+  788 00000000         
+  789 00000000         Vector160
+  790 00000000         Vector164
+  791 00000000         Vector168
+  792 00000000         Vector16C
+  793 00000000         Vector170
+  794 00000000         Vector174
+  795 00000000         Vector178
+  796 00000000         Vector17C
+  797 00000000         
+  798 00000000         
+  799 00000000         Vector180
+  800 00000000         Vector184
+  801 00000000         Vector188
+  802 00000000         Vector18C
+  803 00000000         Vector190
+  804 00000000         Vector194
+  805 00000000         Vector198
+  806 00000000         Vector19C
+  807 00000000         
+  808 00000000         
+  809 00000000         Vector1A0
+  810 00000000         Vector1A4
+  811 00000000         Vector1A8
+  812 00000000         Vector1AC
+  813 00000000         Vector1B0
+  814 00000000         Vector1B4
+  815 00000000         Vector1B8
+  816 00000000         Vector1BC
+  817 00000000         #line   998              "..\\..\\..\\..\\..\\os\\common
+\\ports\\ARMCMx\\compilers\\RVCT\\vectors.s"
+  998 00000000 E7FE            b                _unhandled_exception
+  999 00000002                 ENDP
+ 1000 00000002         
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+ 1001 00000002                 END
+Command Line: --debug --xref --cpreproc --diag_suppress=9931 --cpu=Cortex-M4.fp
+ --apcs=interwork --depend=.\obj\vectors.d -o.\obj\vectors.o -I..\ -I..\..\..\.
+.\..\os\common\ports\ARMCMx\devices\STM32F4xx -I..\..\..\..\..\os\rt\ports\ARMC
+Mx -IF:\RTOS\ChibiOS\ChibiOS_3.0.2\testhal\STM32\STM32F4xx\IRQ_STORM_FPU\keil\R
+TE -Ii:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32
+F4xx\Include -Ii:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA
+ 520" --predefine="STM32F407xx SETA 1" --predefine="STM32F407xx SETA 1" --list=
+.\lst\vectors.lst ..\..\..\..\..\os\common\ports\ARMCMx\compilers\RVCT\vectors.
+s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+RESET 00000000
+
+Symbol: RESET
+   Definitions
+      At line 43 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+   Uses
+      None
+Comment: RESET unused
+__Vectors 00000000
+
+Symbol: __Vectors
+   Definitions
+      At line 49 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+   Uses
+      At line 47 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+Comment: __Vectors used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 365 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      None
+Comment: .text unused
+BusFault_Handler 00000000
+
+Symbol: BusFault_Handler
+   Definitions
+      At line 689 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 55 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 376 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+DebugMon_Handler 00000000
+
+Symbol: DebugMon_Handler
+   Definitions
+      At line 696 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 62 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 383 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+HardFault_Handler 00000000
+
+Symbol: HardFault_Handler
+   Definitions
+      At line 687 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 53 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 374 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+MemManage_Handler 00000000
+
+Symbol: MemManage_Handler
+   Definitions
+      At line 688 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 54 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 375 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+NMI_Handler 00000000
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: NMI_Handler
+   Definitions
+      At line 686 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 52 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 373 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+PendSV_Handler 00000000
+
+Symbol: PendSV_Handler
+   Definitions
+      At line 698 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 64 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 385 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+SVC_Handler 00000000
+
+Symbol: SVC_Handler
+   Definitions
+      At line 695 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 61 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 382 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+SysTick_Handler 00000000
+
+Symbol: SysTick_Handler
+   Definitions
+      At line 699 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 65 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 386 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+UsageFault_Handler 00000000
+
+Symbol: UsageFault_Handler
+   Definitions
+      At line 690 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 56 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 377 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector100 00000000
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: Vector100
+   Definitions
+      At line 759 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 125 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 446 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector104 00000000
+
+Symbol: Vector104
+   Definitions
+      At line 760 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 126 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 447 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector108 00000000
+
+Symbol: Vector108
+   Definitions
+      At line 761 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 127 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 448 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector10C 00000000
+
+Symbol: Vector10C
+   Definitions
+      At line 762 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 128 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 449 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector110 00000000
+
+Symbol: Vector110
+   Definitions
+      At line 763 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 129 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 450 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+Vector114 00000000
+
+Symbol: Vector114
+   Definitions
+      At line 764 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 130 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 451 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector118 00000000
+
+Symbol: Vector118
+   Definitions
+      At line 765 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 131 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 452 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector11C 00000000
+
+Symbol: Vector11C
+   Definitions
+      At line 766 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 132 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 453 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector120 00000000
+
+Symbol: Vector120
+   Definitions
+      At line 769 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 135 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 456 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector124 00000000
+
+Symbol: Vector124
+   Definitions
+      At line 770 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 136 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 457 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Vector128 00000000
+
+Symbol: Vector128
+   Definitions
+      At line 771 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 137 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 458 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector12C 00000000
+
+Symbol: Vector12C
+   Definitions
+      At line 772 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 138 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 459 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector130 00000000
+
+Symbol: Vector130
+   Definitions
+      At line 773 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 139 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 460 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector134 00000000
+
+Symbol: Vector134
+   Definitions
+      At line 774 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 140 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 461 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector138 00000000
+
+Symbol: Vector138
+   Definitions
+      At line 775 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 141 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 462 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+
+Vector13C 00000000
+
+Symbol: Vector13C
+   Definitions
+      At line 776 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 142 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 463 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector140 00000000
+
+Symbol: Vector140
+   Definitions
+      At line 779 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 145 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 466 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector144 00000000
+
+Symbol: Vector144
+   Definitions
+      At line 780 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 146 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 467 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector148 00000000
+
+Symbol: Vector148
+   Definitions
+      At line 781 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 147 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 468 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector14C 00000000
+
+Symbol: Vector14C
+   Definitions
+      At line 782 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 148 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 7 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 469 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector150 00000000
+
+Symbol: Vector150
+   Definitions
+      At line 783 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 149 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 470 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector154 00000000
+
+Symbol: Vector154
+   Definitions
+      At line 784 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 150 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 471 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector158 00000000
+
+Symbol: Vector158
+   Definitions
+      At line 785 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 151 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 472 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector15C 00000000
+
+Symbol: Vector15C
+   Definitions
+      At line 786 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 152 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 473 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector160 00000000
+
+Symbol: Vector160
+   Definitions
+      At line 789 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 155 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 8 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+      At line 476 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector164 00000000
+
+Symbol: Vector164
+   Definitions
+      At line 790 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 156 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 477 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector168 00000000
+
+Symbol: Vector168
+   Definitions
+      At line 791 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 157 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 478 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector16C 00000000
+
+Symbol: Vector16C
+   Definitions
+      At line 792 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 158 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 479 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector170 00000000
+
+Symbol: Vector170
+   Definitions
+      At line 793 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 159 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 480 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector174 00000000
+
+Symbol: Vector174
+   Definitions
+      At line 794 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 9 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 160 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 481 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector178 00000000
+
+Symbol: Vector178
+   Definitions
+      At line 795 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 161 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 482 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector17C 00000000
+
+Symbol: Vector17C
+   Definitions
+      At line 796 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 162 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 483 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector180 00000000
+
+Symbol: Vector180
+   Definitions
+      At line 799 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 165 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 486 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector184 00000000
+
+Symbol: Vector184
+   Definitions
+      At line 800 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 166 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 487 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector188 00000000
+
+Symbol: Vector188
+   Definitions
+      At line 801 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 10 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 167 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 488 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector18C 00000000
+
+Symbol: Vector18C
+   Definitions
+      At line 802 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 168 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 489 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector190 00000000
+
+Symbol: Vector190
+   Definitions
+      At line 803 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 169 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 490 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector194 00000000
+
+Symbol: Vector194
+   Definitions
+      At line 804 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 170 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 491 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector198 00000000
+
+Symbol: Vector198
+   Definitions
+      At line 805 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 171 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 492 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector19C 00000000
+
+Symbol: Vector19C
+   Definitions
+      At line 806 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 11 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+   Uses
+      At line 172 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 493 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1A0 00000000
+
+Symbol: Vector1A0
+   Definitions
+      At line 809 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 175 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 496 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1A4 00000000
+
+Symbol: Vector1A4
+   Definitions
+      At line 810 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 176 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 497 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1A8 00000000
+
+Symbol: Vector1A8
+   Definitions
+      At line 811 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 177 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 498 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1AC 00000000
+
+Symbol: Vector1AC
+   Definitions
+      At line 812 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 178 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 499 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1B0 00000000
+
+Symbol: Vector1B0
+   Definitions
+
+
+
+ARM Macro Assembler    Page 12 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 813 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 179 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 500 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1B4 00000000
+
+Symbol: Vector1B4
+   Definitions
+      At line 814 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 180 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 501 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1B8 00000000
+
+Symbol: Vector1B8
+   Definitions
+      At line 815 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 181 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 502 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1BC 00000000
+
+Symbol: Vector1BC
+   Definitions
+      At line 816 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 182 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 503 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector1C 00000000
+
+Symbol: Vector1C
+   Definitions
+      At line 691 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 57 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 378 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector20 00000000
+
+Symbol: Vector20
+
+
+
+ARM Macro Assembler    Page 13 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 692 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 58 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 379 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector24 00000000
+
+Symbol: Vector24
+   Definitions
+      At line 693 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 59 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 380 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector28 00000000
+
+Symbol: Vector28
+   Definitions
+      At line 694 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 60 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 381 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector34 00000000
+
+Symbol: Vector34
+   Definitions
+      At line 697 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 63 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 384 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector40 00000000
+
+Symbol: Vector40
+   Definitions
+      At line 700 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 66 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 387 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector44 00000000
+
+
+
+
+ARM Macro Assembler    Page 14 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: Vector44
+   Definitions
+      At line 701 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 67 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 388 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector48 00000000
+
+Symbol: Vector48
+   Definitions
+      At line 702 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 68 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 389 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector4C 00000000
+
+Symbol: Vector4C
+   Definitions
+      At line 703 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 69 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 390 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector50 00000000
+
+Symbol: Vector50
+   Definitions
+      At line 704 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 70 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 391 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector54 00000000
+
+Symbol: Vector54
+   Definitions
+      At line 705 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 71 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 392 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector58 00000000
+
+
+
+ARM Macro Assembler    Page 15 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: Vector58
+   Definitions
+      At line 706 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 72 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 393 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector5C 00000000
+
+Symbol: Vector5C
+   Definitions
+      At line 707 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 73 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 394 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector60 00000000
+
+Symbol: Vector60
+   Definitions
+      At line 709 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 75 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 396 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector64 00000000
+
+Symbol: Vector64
+   Definitions
+      At line 710 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 76 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 397 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector68 00000000
+
+Symbol: Vector68
+   Definitions
+      At line 711 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 77 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 398 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+
+ARM Macro Assembler    Page 16 Alphabetic symbol ordering
+Relocatable symbols
+
+Vector6C 00000000
+
+Symbol: Vector6C
+   Definitions
+      At line 712 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 78 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 399 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector70 00000000
+
+Symbol: Vector70
+   Definitions
+      At line 713 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 79 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 400 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector74 00000000
+
+Symbol: Vector74
+   Definitions
+      At line 714 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 80 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 401 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector78 00000000
+
+Symbol: Vector78
+   Definitions
+      At line 715 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 81 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 402 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector7C 00000000
+
+Symbol: Vector7C
+   Definitions
+      At line 716 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 82 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 403 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 17 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Vector80 00000000
+
+Symbol: Vector80
+   Definitions
+      At line 719 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 85 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 406 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector84 00000000
+
+Symbol: Vector84
+   Definitions
+      At line 720 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 86 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 407 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector88 00000000
+
+Symbol: Vector88
+   Definitions
+      At line 721 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 87 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 408 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector8C 00000000
+
+Symbol: Vector8C
+   Definitions
+      At line 722 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 88 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 409 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector90 00000000
+
+Symbol: Vector90
+   Definitions
+      At line 723 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 89 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 410 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 18 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+
+Vector94 00000000
+
+Symbol: Vector94
+   Definitions
+      At line 724 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 90 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 411 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector98 00000000
+
+Symbol: Vector98
+   Definitions
+      At line 725 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 91 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 412 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+Vector9C 00000000
+
+Symbol: Vector9C
+   Definitions
+      At line 726 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 92 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 413 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorA0 00000000
+
+Symbol: VectorA0
+   Definitions
+      At line 729 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 95 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 416 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorA4 00000000
+
+Symbol: VectorA4
+   Definitions
+      At line 730 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 96 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 19 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 417 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorA8 00000000
+
+Symbol: VectorA8
+   Definitions
+      At line 731 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 97 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 418 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorAC 00000000
+
+Symbol: VectorAC
+   Definitions
+      At line 732 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 98 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 419 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorB0 00000000
+
+Symbol: VectorB0
+   Definitions
+      At line 733 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 99 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+      At line 420 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorB4 00000000
+
+Symbol: VectorB4
+   Definitions
+      At line 734 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 100 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 421 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorB8 00000000
+
+Symbol: VectorB8
+   Definitions
+      At line 735 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 101 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 20 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+      At line 422 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorBC 00000000
+
+Symbol: VectorBC
+   Definitions
+      At line 736 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 102 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 423 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorC0 00000000
+
+Symbol: VectorC0
+   Definitions
+      At line 739 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 105 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 426 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorC4 00000000
+
+Symbol: VectorC4
+   Definitions
+      At line 740 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 106 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 427 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorC8 00000000
+
+Symbol: VectorC8
+   Definitions
+      At line 741 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 107 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 428 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorCC 00000000
+
+Symbol: VectorCC
+   Definitions
+      At line 742 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 21 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 108 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 429 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorD0 00000000
+
+Symbol: VectorD0
+   Definitions
+      At line 743 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 109 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 430 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorD4 00000000
+
+Symbol: VectorD4
+   Definitions
+      At line 744 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 110 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 431 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorD8 00000000
+
+Symbol: VectorD8
+   Definitions
+      At line 745 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 111 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 432 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorDC 00000000
+
+Symbol: VectorDC
+   Definitions
+      At line 746 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 112 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 433 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorE0 00000000
+
+Symbol: VectorE0
+   Definitions
+      At line 749 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+
+
+ARM Macro Assembler    Page 22 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      At line 115 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 436 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorE4 00000000
+
+Symbol: VectorE4
+   Definitions
+      At line 750 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 116 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 437 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorE8 00000000
+
+Symbol: VectorE8
+   Definitions
+      At line 751 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 117 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 438 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorEC 00000000
+
+Symbol: VectorEC
+   Definitions
+      At line 752 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 118 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 439 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorF0 00000000
+
+Symbol: VectorF0
+   Definitions
+      At line 753 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 119 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 440 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorF4 00000000
+
+Symbol: VectorF4
+   Definitions
+      At line 754 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+
+
+
+ARM Macro Assembler    Page 23 Alphabetic symbol ordering
+Relocatable symbols
+
+ers\\RVCT\\vectors.s
+   Uses
+      At line 120 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 441 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorF8 00000000
+
+Symbol: VectorF8
+   Definitions
+      At line 755 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 121 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 442 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+VectorFC 00000000
+
+Symbol: VectorFC
+   Definitions
+      At line 756 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 122 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 443 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+_unhandled_exception 00000000
+
+Symbol: _unhandled_exception
+   Definitions
+      At line 372 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+   Uses
+      At line 371 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+      At line 998 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compil
+ers\\RVCT\\vectors.s
+
+112 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+Reset_Handler 00000000
+
+Symbol: Reset_Handler
+   Definitions
+      At line 46 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+   Uses
+      At line 51 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+Comment: Reset_Handler used once
+__initial_msp 00000000
+
+Symbol: __initial_msp
+   Definitions
+      At line 45 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+   Uses
+      At line 50 in file ..\\..\\..\\..\\..\\os\\common\\ports\\ARMCMx\\compile
+rs\\RVCT\\vectors.s
+Comment: __initial_msp used once
+2 symbols
+449 symbols in table
