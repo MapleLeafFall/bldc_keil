@@ -1,0 +1,9 @@
+{
+    "search.exclude": {
+        "**/docs": true
+    },
+    "files.watcherExclude": {
+        "**/ChibiOS_3.0.2": true
+    },
+    "C_Cpp.default.forcedInclude": []
+}

@@ -1,0 +1,171 @@
+20210306:
+1、备忘：
+(1)usb插上电脑有不停的叮咚响，以为是接触不良、供电不足，实际不是。
+(2)用STLINK Utility界面工具擦除flash（Erase Chip）、下载（Program&Verify）王广乙的VESC_default.bin即可。（甚至不用重新拔插usb）
+(3)而原版代码bldc的编译文件BLDC_4_ChibiOS.bin烧进去后连接失败；
+
+2、代码结构分析：
+（1）hw_410：
+main() ->
+	halInit() -> //初始化使能的HAL驱动，和板子专用的功能（实际为空）
+        osalInit();
+        hal_lld_init(); // /* Platform low level initializations.*/
+        palInit(&pal_default_config); //使能GPIOA-G的时钟
+        canInit();
+        i2cInit();
+        icuInit(); //初始化TIM3、TIM9为ICU（Input Capture Unit），作为编码器接口
+        spiInit();
+        uartInit() ->
+            uart_lld_init() -> //USARTv1,指定串口3和6的状态，及其对应的DMA通道
+                uartObjectInit(&UARTD3);
+                uartObjectInit(&UARTD6);
+        usbInit() ->
+            usb_lld_init() -> //...\OTGv1\usb_lld.c
+                usbObjectInit(&USBD1) //给USB结构体成员清零
+        sduInit(); //Serial Driver on USB?（实际为空）
+        boardInit(); //（实际为空）
+        stInit(); //初始化FOC的TIM2：计数清零、debug时停止输出、分频系数48M/50k(?)
+	chSysInit() -> //初始化ChibiOS/RT：必须先关中断，执行完该函数后中断自动使能
+        port_init(); //引脚相关初始化：实际为空
+        _scheduler_init() -> //调度器初始化：初始化就绪队列（ready_queue）
+            queue_init(&ch.rlist.r_queue);
+        _vt_init(); //初始化虚拟定时器：空的定时器双向链表
+        _tm_init(); //初始化时间测量单元：测量并记录定时器读取函数调用时的跳转耗时
+        _core_init(); //内存管理的低级初始化：指定堆的起始、结束地址到全局变量nextmem、endmem
+        _heap_init() -> //初始化全局的堆管理结构体default_heap{}：分配函数、空块链表、专用互斥锁
+            default_heap.h_provider = chCoreAlloc; //指定堆的分配函数：有互斥锁
+            default_heap.h_free.h.u.next = NULL; //指定堆的空块链表：初始为NULL
+            default_heap.h_free.h.size = 0; //指定堆的当前空块大小为0
+            chMtxObjectInit(&default_heap.h_mtx); //初始化互斥锁中的等待队列为空（双向链表）
+        setcurrp(_thread_init(&ch.mainthread, NORMALPRIO)); //内部函数：初始化线程并使其成为当前线程
+            _thread_init(&ch.mainthread, NORMALPRIO); //内部函数：初始化ch.mainthread线程的各个成员，并设置其优先级
+            currp->p_state = CH_STATE_CURRENT; //系统为运行状态
+            chSysEnable(); //使能中断
+                __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory"); 
+                //设置CPU工作在ARM状态、系统模式、使能IRQ/FIQ中断（https://www.cnblogs.com/lifexy/p/7101686.html）
+            chRegSetThreadName((const char *)&ch_debug); //设置当前线程名为"main"；ch_debug还有其他const成员，但这里不使用
+            thread_t *tp =  chThdCreateStatic(ch.idle_thread_wa,
+                                      sizeof(ch.idle_thread_wa),
+                                      IDLEPRIO,
+                                      (tfunc_t)_idle_thread,
+                                      NULL); //创建空闲线程：作为各系统状态下，工作在最低功耗模式的任务，其优先级最低
+            chRegSetThreadNameX(tp, "idle"); //设置空闲线程名为"idle"
+    chThdSleepMilliseconds(1000) ->
+        chThdSleep(MS2ST(msec)) ->
+            #define MS2ST(msec) ((systime_t)(((((uint32_t)(msec)) * ((uint32_t)CH_CFG_ST_FREQUENCY)) + 999UL) / 1000UL))
+            //单位转换：us转为系统滴答数（10kHz下为100us）
+            chSysLock();
+            chThdSleepS(time) ->
+                chSchGoSleepTimeoutS(CH_STATE_SLEEPING, time) -> //把线程状态设置为CH_STATE_SLEEPING后放入睡眠（队列？），超时时间为time
+                    chVTDoSetI(&vt, time, wakeup, currp) -> //初始化虚拟定时器vt的计时时间为time，计时完成后执行wakeup(currp)
+                        wakeup(currp) -> //根据currp->p_state添加额外一些处理，然后唤醒线程放入ready_list
+                            (void) chSchReadyI(tp);
+                    chSchGoSleepS(newstate); //把线程状态设置为CH_STATE_SLEEPING后从ready_list删除，并切换到下一个线程执行
+                        ...
+                        setcurrp(queue_fifo_remove(&ch.rlist.r_queue));
+                        chSysSwitch(currp, otp) ->
+                            port_switch(ntp, otp) -> 
+                                _port_switch_arm(ntp, otp) -> //chcoreasm.s
+                                    stmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+                                    str     sp, [r1, #12]
+                                    ldr     sp, [r0, #12]
+                    if (chVTIsArmedI(&vt)) { //检查虚拟定时器有没有成功装载：判断条件为if(vtp->vt_func != NULL)，正常情况应该是wakeup(?)
+                        chVTDoResetI(&vt); //如果没有成功装载，则复位该虚拟定时器
+                    }
+            chSysUnlock();
+    hw_init_gpio() -> //hw_410.c：初始化引脚
+    conf_general_init() -> //根据Flash Page0、Page1、e2prom的关系决定如何恢复MCConf和AppConf参数
+        ...
+    ledpwm_init(); //初始化gamma_table[]数组（LED呼吸灯数组？）
+    conf_general_read_mc_configuration(&mcconf); //从e2prom读取电机参数到结构体mcconf
+    mc_interface_init(&mcconf) -> //根据电机模式初始化对应的外设、创建线程
+      	... //初始化一些电机相关的全局变量
+        chThdCreateStatic(..., timer_thread, ...) ->
+            static THD_FUNCTION(timer_thread, arg) -> //@mc_interface.c
+            //根据Drv8302的fault引脚判断是否停止电机；根据ADC采集的温度和电压值实时更新电机结构体对应的极限值
+                for(;;){
+                    mc_interface_fault_stop(FAULT_CODE_DRV8302);
+                    update_override_limits(&m_conf)                    
+                }
+    	chThdCreateStatic(..., sample_send_thread, ...) ->
+            static THD_FUNCTION(sample_send_thread, arg) ->
+                for(;;){
+                    chEvtWaitAny((eventmask_t) 1); //等待一个bit0事件：可能是外部控制信号，用来控制数据的发送与否（？）
+                    //电机采样全局变量赋值给uint8_t buffer[20];
+                    commands_send_samples(buffer, index) ->
+                        commands_send_packet(buffer, index) ->
+                            send_func(data, len); //函数指针调用发送函数；可能是usb、can、串口、nrf
+                }
+        switch (m_conf.motor_type) {
+            ...
+            case MOTOR_TYPE_FOC:
+                mcpwm_foc_init(&m_conf) ->
+                    filter_create_fir_lowpass((float*)kv_fir_coeffs, ...);
+                    filter_create_fir_lowpass((float*)amp_fir_coeffs, ...);
+                    filter_create_fir_lowpass((float*)current_fir_coeffs, ...);
+                    //分别计算KV、Amplitude、current的FIR滤波器系数                    
+                    ... //初始化一些电机相关的全局变量
+                    ... //初始化TIM1为PWM：周期为FOC周期m_conf->foc_f_sw（？）
+                    ... //初始化ADC1和对应的DMA通道，顺便减去DC偏置量校准一下
+                    ... //初始化TIM8为ADC的触发源：周期为FOC周期m_conf->foc_f_sw（？）
+                    ... //初始化TIM12作为Various time measurements（？）
+                    chThdCreateStatic(..., timer_thread, ...); //@mcpwm_foc.c
+                    //电机状态观测、速度环pid控制电机；仅工作一段时间后退出线程
+                    ... //初始化看门狗
+                break;
+        }
+    commands_init() ->
+        chThdCreateStatic(..., detect_thread, ...) -> //重点：创建电机参数测量线程
+            for(;;) {
+                conf_general_detect_motor_param() ->
+                    chEvtWaitAny((eventmask_t) 1); //等待一个bit0事件：可能等待上位机控制电机的参数测量，使得该线程可进行可不进行（？）
+                    ... //重点函数：测量电机参数（？）
+                buffer_append_int32(send_buffer, (int32_t)(detect_cycle_int_limit * 1000.0), &ind);
+                buffer_append_int32(send_buffer, (int32_t)(detect_coupling_k * 1000.0), &ind);
+                memcpy(send_buffer + ind, detect_hall_table, 8);
+                commands_send_packet() 
+                //发送三个测量值（？）：detect_cycle_int_limit、detect_coupling_k、detect_hall_table
+            }
+    comm_usb_init() //初始化usb
+    conf_general_read_app_configuration(&appconf); //从e2prom读取电机参数到结构体appconf
+	app_init(&appconf);
+	timeout_init() ->
+        chThdCreateStatic(..., timeout_thread, ...) ->
+            static THD_FUNCTION(timeout_thread, arg) {
+                if (超时)
+                    mc_interface_set_brake_current(timeout_brake_current); //使用指定电流进行刹车
+            }
+	timeout_configure(appconf.timeout_msec, appconf.timeout_brake_current); //设置刹车电流和超时时间
+	comm_can_init(); //初始化can，并创建3个相关的线程
+	chThdCreateStatic(..., periodic_thread, ...) ->
+        //灯语控制、调试接口数据传输
+        //重点函数：电机状态观测
+	chThdCreateStatic(..., timer_thread, ....) -> //不同于上面的timer_thread、timeout_thread()线程
+        static THD_FUNCTION(timer_thread, arg) {
+            for(;;)
+                packet_timerfunc() //每1ms检查一次，要使handler_states[i].rx_state=0（？）
+        }
+    for(;;){}
+
+0309：
+1、正常状态下执行完main()后的各个线程：
+    (1)chThdCreateStatic(..., _idle_thread, ...)
+        //创建空闲线程：作为各系统状态下，工作在最低功耗模式的任务，其优先级最低。
+    (2)chThdCreateStatic(..., timer_thread, ...) -> //@mc_interface.c
+        //根据Drv8302的fault引脚判断是否停止电机；根据ADC采集的温度和电压值实时更新电机结构体对应的极限值。
+    (3)chThdCreateStatic(..., sample_send_thread, ...)
+        //等待一个bit0事件：可能是外部控制信号，用来控制电机采集数据的发送与否（？）。
+    (4)chThdCreateStatic(..., timer_thread, ...) -> //@mcpwm_foc.c
+        //电机状态观测、速度环pid控制电机；仅工作一段时间后退出线程
+    (5)chThdCreateStatic(..., detect_thread, ...)
+        //chEvtWaitAny((eventmask_t) 1); //等待一个bit0事件：可能等待上位机控制电机的参数测量，使得该线程可进行可不进行（？）
+        //重点函数：测量电机参数（？）
+    (6)chThdCreateStatic(..., timeout_thread, ...) -> //@timeout.c
+        //使用指定电流进行刹车
+(7)chThdCreateStatic(..., periodic_thread, ...)
+    //灯语控制、调试接口数据传输
+    //重点函数：电机状态观测
+    (8)chThdCreateStatic(..., timer_thread, ....) -> //@main.c
+        //每1ms检查一次，要使handler_states[i].rx_state=0（？）
+
+
