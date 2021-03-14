@@ -37,8 +37,8 @@
 #include <math.h>
 
 // Global variables
-volatile uint16_t ADC_Value[HW_ADC_CHANNELS];
-volatile int ADC_curr_norm_value[3];
+volatile uint16_t ADC_Value[HW_ADC_CHANNELS]; //Three phases current(in regulation group): updated in DMA, triggered by TIM8CC1.
+volatile int ADC_curr_norm_value[3]; //Three phases current(in injection group): updated in JEOC ADC interrupt(mcpwm_foc_adc_inj_int_handler) instead of DMA, triggered by TIM8CC2 and TIM1CC4.
 
 // Private variables
 static volatile mc_configuration m_conf;
@@ -965,7 +965,7 @@ void mc_interface_mc_timer_isr(void) {
 		curr_diff_sum += current_in / f_samp;
 		curr_diff_samples += 1.0 / f_samp;
 
-		if (curr_diff_samples >= 0.01) {
+		if (curr_diff_samples >= 0.01) { //Accumulate amp and watt for every 10ms, to get params ah and watth.
 			if (curr_diff_sum > 0.0) {
 				m_amp_seconds += curr_diff_sum;
 				m_watt_seconds += curr_diff_sum * input_voltage;
@@ -987,6 +987,9 @@ void mc_interface_mc_timer_isr(void) {
 		m_sample_at_start = 0;
 	}
 
+	//Sample some data to send if corresponding command is received:
+	//1. Every m_sample_int entries to here will sample once, including 3 phases in regulation and injection groups;
+	//2. Every m_sample_len data points will send signal 1 to current thread.
 	static int a = 0;
 	if (!m_sample_ready) {
 		a++;

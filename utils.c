@@ -83,6 +83,7 @@ void utils_norm_angle_rad(float *angle) {
 	}
 }
 
+//Limit a number to an area of [min, max]
 int utils_truncate_number(float *number, float min, float max) {
 	int did_trunc = 0;
 
@@ -97,6 +98,7 @@ int utils_truncate_number(float *number, float min, float max) {
 	return did_trunc;
 }
 
+//Get a number B within [B_min, B_max] by comparing a number A within its [A_min, A_max]
 float utils_map(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

@@ -107,6 +107,8 @@ main() ->
                     ... //初始化一些电机相关的全局变量
                     ... //初始化TIM1为PWM：周期为FOC周期m_conf->foc_f_sw（？）
                     ... //初始化ADC1和对应的DMA通道，顺便减去DC偏置量校准一下
+                    ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE);
+	                nvicEnableVector(ADC_IRQn, 4); //使能ADC的“注入组”转换完成中断
                     ... //初始化TIM8为ADC的触发源：周期为FOC周期m_conf->foc_f_sw（？）
                     ... //初始化TIM12作为Various time measurements（？）
                     chThdCreateStatic(..., timer_thread, ...); //@mcpwm_foc.c
@@ -168,4 +170,137 @@ main() ->
     (8)chThdCreateStatic(..., timer_thread, ....) -> //@main.c
         //每1ms检查一次，要使handler_states[i].rx_state=0（？）
 
+0310:
+1、主要线程有两个：
+（1）periodic_thread：
+for(;;) {
+    //如果电机在正常工作状态：绿灯慢闪
+    //如果发生错误（过温、过压、欠压、drv8302错误等）：红、绿灯交替快闪；否则红灯不闪
+    
+    if (mc_interface_get_state() == MC_STATE_DETECTING) -> //如果电机在参数测量状态：
+        commands_send_rotor_pos(mcpwm_get_detect_pos()) ->
 
+}
+（2）timer_thread：
+
+2、除了看得见的线程还有中断函数在执行：
+mc_interface_init(&mcconf) ->
+    mcpwm_foc_init(&m_conf) ->
+        ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE) ->
+            CH_IRQ_HANDLER(ADC1_2_3_IRQHandler) ->
+                mc_interface_adc_inj_int_handler() ->
+                    mcpwm_foc_adc_inj_int_handler() ->
+                        TIM12->CNT = 0; //清零以统计该函数的耗时：在最后记下TIM12->CNT
+
+                        ADC_curr_norm_value[3]=ADC注入组转换结果，更新三相电流
+                        ia=ADC_curr_norm_value[0]转化，单位：*10A
+                        ib=ADC_curr_norm_value[1]转化，单位：*10A
+                        if (m_samples.measure_inductance_now){
+                            //电感测量的状态机：一共10步
+                        }
+
+                        if (m_state == MC_STATE_RUNNING) {
+                            m_motor_state.i_alpha = ia;
+                            m_motor_state.i_beta = ONE_BY_SQRT3 * ia + TWO_BY_SQRT3 * ib; //Clarke变换（幅值不变）：abc静止坐标系->αβ静止坐标系
+                            
+                            //对当前占空比值进行：取绝对值、低通滤波，然后限幅为-1.0~+1.0（？）
+                            if (control_duty) { //如果是在占空比模式、或者柔性刹车（电子制动系统EBS？）进入低速区、或者在速度环下刹车进入低速区：
+                                if(当前占空比大于给定占空比、或iq小于下限值) {
+                                    //由给定duty=0和当前duty的error进行PID，算出刹车期间的iq给定值（iq_err=(duty_set-duty_now)/Rmin？）
+                                    //因为突然把占空比清零比较危险，所以这里需要一个PID（"Truncating the duty cycle here would be dangerous, so run a PID controller"）
+                                    //duty理解为“电机施加的电压对母线电压的百分比”
+                                }
+                                else { //如果当前占空比小于等于给定占空比、且iq大于等于下限值：
+                                    //则让给定占空比保存为占空比上限
+                                    //设置iq给定电流为电流上限
+                                }
+                            }else if (m_control_mode == CONTROL_MODE_CURRENT_BRAKE) { //如果是柔性刹车（电子制动系统EBS？）且未进入低速区：
+                                    //如果在正转：则iq给定值取反；
+                                    //如果已停止：则iq给定值为0；
+                                    //没有反转的判断：说明该模式下电机只有单向转
+                            }
+
+                            observer_update(m_motor_state.v_alpha, m_motor_state.v_beta,
+                            m_motor_state.i_alpha, m_motor_state.i_beta, dt, &m_observer_x1,
+                            &m_observer_x2, &m_phase_now_observer); //重要函数：非线性观测器，无感状态下观测角度值
+                            //foc必须的电角度非线性观测器：（无感时直接用、有感时要校正）
+                            //给定一个观测量表达式：x=fn(phase)，然后给出它所满足的微分方程，即为观测器；
+                            //该微分方程的输入只需要i、v，不需要speed，所以很方便实用
+                            
+                            switch (m_conf->foc_sensor_mode) {
+                            case FOC_SENSOR_MODE_SENSORLESS:
+                                m_motor_state.phase = m_phase_now_observer;
+                                //以观测的相位值作为实际值
+                                if (duty_abs < m_conf->foc_sl_d_current_duty) {
+                                    id_set_tmp = utils_map(duty_abs, 0.0, m_conf->foc_sl_d_current_duty,
+                                    fabsf(m_motor_state.iq_target) * m_conf->foc_sl_d_current_factor, 0.0);
+                                //为了使观测器在低速时更好地跟踪，需要快速地注入d轴电流（但在具有死区补偿时似乎不是必要的）
+                                //把[0.0, foc_sl_d_current_duty]区间的duty_abs映射到[iq_target*foc_sl_d_current_factor, 0.0]得到id_set_tmp（好像只能得到固定的0？）
+                            }
+
+                            //先后对iq限幅，确定新的iq目标值：iq限幅、iq和id的矢量和限幅、iq单位转换后限幅（mod_q？）
+                            control_current(&m_motor_state, dt); //重要函数：电流环控制
+                        }
+                        else { //if (m_state != MC_STATE_RUNNING); "when the motor is undriven"
+                            float Va = ADC_VOLTS(ADC_IND_SENS1) * ((VIN_R1 + VIN_R2) / VIN_R2);
+                            float Vb = ADC_VOLTS(ADC_IND_SENS3) * ((VIN_R1 + VIN_R2) / VIN_R2);
+                            float Vc = ADC_VOLTS(ADC_IND_SENS2) * ((VIN_R1 + VIN_R2) / VIN_R2); //测量反电动势Vbemf
+
+                       		m_motor_state.v_alpha = (2.0 / 3.0) * Va - (1.0 / 3.0) * Vb - (1.0 / 3.0) * Vc;
+                        	m_motor_state.v_beta = ONE_BY_SQRT3 * Vb - ONE_BY_SQRT3 * Vc; //Clarke transform：反电动势不同于电流：没有矢量和为零的关系，所以有3路ADC，变换时都用上
+
+                            utils_fast_sincos_better(m_motor_state.phase, &s, &c);
+                            m_motor_state.vd = c * m_motor_state.v_alpha + s * m_motor_state.v_beta;
+                            m_motor_state.vq = c * m_motor_state.v_beta  - s * m_motor_state.v_alpha; //Park transform
+
+                    		m_motor_state.mod_d = m_motor_state.vd / ((2.0 / 3.0) * m_motor_state.v_bus);
+		                    m_motor_state.mod_q = m_motor_state.vq / ((2.0 / 3.0) * m_motor_state.v_bus); //更新调制系数（？）
+
+                       		observer_update(m_motor_state.v_alpha, m_motor_state.v_beta,
+            				m_motor_state.i_alpha, m_motor_state.i_beta, dt, &m_observer_x1,
+			            	&m_observer_x2, &m_phase_now_observer); //重要函数：非线性观测器，无感状态下观测角度值
+
+                       		switch (m_conf->foc_sensor_mode) {
+                            case FOC_SENSOR_MODE_SENSORLESS:
+                                m_motor_state.phase = m_phase_now_observer; //观测器的角度直接作为电机当前状态中的实际角度
+                            }
+                        }
+
+                        m_motor_state.duty_now = SIGN(m_motor_state.vq) *
+			            sqrtf(m_motor_state.mod_d * m_motor_state.mod_d +
+					    m_motor_state.mod_q * m_motor_state.mod_q) / SQRT3_BY_2; // Calculate duty cycle（？）
+
+                        pll_run(m_motor_state.phase, dt, &m_pll_phase, &m_pll_speed); //重要函数：Run PLL for speed estimation（？）
+
+                        diff_f = utils_angle_difference(angle_now, angle_last);
+                        m_pos_pid_now += diff_f / m_conf->p_pid_ang_div;
+                        //根据p_pid_ang_div参数（应该是虚拟齿轮比），换算得当前角度值：
+
+                        if (m_state == MC_STATE_RUNNING) { //如果电机在工作状态：则执行位置pid控制
+                            run_pid_control_pos(m_pos_pid_now, m_pos_pid_set, dt);
+                        }
+
+                        mc_interface_mc_timer_isr() -> //重要函数：执行电机的定时器任务：把上面的计算结果应用到电机的控制（？）
+                            //控制闪灯频率
+                            //检测过压、欠压次数是否大于等于8
+                            //执行可能需要的pwm周期后处理函数pwn_done_func()（默认为空）
+                            const float current = mc_interface_get_tot_current_filtered(); //获取iq滤波值：带符号，表示拉电流或灌电流；用于求多次平均
+                            const float current_in = mc_interface_get_tot_current_in_filtered(); //获取电源输入电流i_bus：正数为耗电、负数为充电；用于求多次平均
+                       		abs_current = mcpwm_foc_get_abs_motor_current(); //获取电机电流幅值i_abs：包括id和iq
+                    		abs_current_filtered = mcpwm_foc_get_abs_motor_current_filtered(); //获取电机电流幅值滤波值i_abs_filtered：包括id和iq
+                            if (m_conf.l_slow_abs_current) {...} //根据l_slow_abs_current选择电机电流的瞬时值/滤波值作为电机过流的判断条件
+                            const float f_samp = mc_interface_get_sampling_frequency_now(); //获取采样频率：等于开关频率foc_f_sw的1/2（？）
+
+                            //收到上位机下发的“需要采集数据”命令时：
+                            //每进入m_sample_int次会触发一次采集；
+                            //每采集m_sample_len次会发送一次信号量通知当前线程；
+                            ...
+                            m_last_adc_duration_sample = mcpwm_get_last_adc_isr_duration(); //记录上一次的adc转换耗时（？）
+
+                        last_inj_adc_isr_duration = (float) TIM12->CNT / 10000000.0; //统计该函数的执行时间：单位：秒（？）
+
+0314：
+1、下次要做的事：
+（1）解决keil工程跑飞的问题：预计16小时；
+（2）尝试keil自带的rtos调试工具：（EventRecorder、SystemView/SystemAnalyzer）；
+（3）不使用keil自带的rtos调试工具，则尝试创建ChibiosStudio工程，来调试代码：预计16小时；

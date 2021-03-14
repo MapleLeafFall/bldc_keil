@@ -77,9 +77,9 @@ typedef enum {
 } mc_fault_code;
 
 typedef enum {
-	CONTROL_MODE_DUTY = 0,
-	CONTROL_MODE_SPEED,
-	CONTROL_MODE_CURRENT,
+	CONTROL_MODE_DUTY = 0, 			//duty = Vmotor / Vbattery = (Imotor*Rwinding + Vbemf) / Vbattery
+	CONTROL_MODE_SPEED,				
+	CONTROL_MODE_CURRENT,			//current control = torque control
 	CONTROL_MODE_CURRENT_BRAKE,
 	CONTROL_MODE_POS,
 	CONTROL_MODE_NONE
@@ -183,12 +183,12 @@ typedef struct {
 	float s_pid_kp;
 	float s_pid_ki;
 	float s_pid_kd;
-	float s_pid_min_erpm;
+	float s_pid_min_erpm;	//stop running when lower than this speed
 	// Pos PID
 	float p_pid_kp;
 	float p_pid_ki;
 	float p_pid_kd;
-	float p_pid_ang_div;
+	float p_pid_ang_div;	//gear ratio for position control
 	// Current controller
 	float cc_startup_boost_duty;
 	float cc_min_current;

@@ -44,7 +44,7 @@ typedef struct {
 	float id_target;
 	float iq_target;
 	float max_duty;
-	float duty_now;
+	float duty_now;			//duty = Vmotor / Vbattery = (Imotor*Rwinding + Vbemf) / Vbattery
 	float phase;
 	float i_alpha;
 	float i_beta;
@@ -82,7 +82,7 @@ static volatile int m_curr1_sum;
 static volatile int m_curr_samples;
 static volatile int m_curr0_offset;
 static volatile int m_curr1_offset;
-static volatile bool m_phase_override;
+static volatile bool m_phase_override;			//Indicating i_alpha, v_alpha, i_beta, v_beta, iq, id, these params are being measuring.
 static volatile float m_phase_now_override;
 static volatile float m_duty_cycle_set;
 static volatile float m_id_set;
@@ -1359,7 +1359,7 @@ void mcpwm_foc_adc_inj_int_handler(void) {
 	ADC_curr_norm_value[1] = curr1;
 	ADC_curr_norm_value[2] = -(ADC_curr_norm_value[0] + ADC_curr_norm_value[1]);
 
-	float ia = ADC_curr_norm_value[0] * (V_REG / 4095.0) / (CURRENT_SHUNT_RES * CURRENT_AMP_GAIN);
+	float ia = ADC_curr_norm_value[0] * (V_REG / 4095.0) / (CURRENT_SHUNT_RES * CURRENT_AMP_GAIN); //ia unit: *10Amp
 	float ib = ADC_curr_norm_value[1] * (V_REG / 4095.0) / (CURRENT_SHUNT_RES * CURRENT_AMP_GAIN);
 //	float ic = -(ia + ib);
 
