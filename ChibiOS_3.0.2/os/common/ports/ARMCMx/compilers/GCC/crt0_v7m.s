@@ -146,42 +146,62 @@
 
 #if !defined(__DOXYGEN__)
 
-                .syntax unified
-                .cpu    cortex-m3
+                .syntax unified       //use unified instructions for both ARM and THUMB modes
+                .cpu    cortex-m3     //select target processor(-mcpu)
 #if CRT0_INIT_FPU == TRUE
-                .fpu    fpv4-sp-d16
+                .fpu    fpv4-sp-d16   //select the floating-point unit to assemble for(-mfpu): version4, single point, with 16 double-point registers
 #else
                 .fpu    softvfp
 #endif
 
-                .thumb
-                .text
+                .thumb                //following statements use thumb instruction set
+                .text                 //following statements are assembled into .text 0 subsection
 
 /*
  * Reset handler.
  */
-                .align  2
-                .thumb_func
-                .global Reset_Handler
+                .align  2             //align to 2 bytes
+                .thumb_func           //the next symbol(Reset_Handler) is a thumb function
+                .global Reset_Handler //make Reset_Handler visible to the linker(ld)
 Reset_Handler:
                 /* Interrupts are globally masked initially.*/
+                //cpsid="Change Processor State: Interrupt Disable" and i="Primask", this statement disables all interrupts including NMI.
                 cpsid   i
 
                 /* PSP stack pointers initialization.*/
-                ldr     r0, =__process_stack_end__
-                msr     PSP, r0
+                ldr     r0, =__process_stack_end__  //give __process_stack_end__ to generic reg r0, and then:
+                msr     PSP, r0                     //give it to special reg PSP, to be initial process stack pointer
 
 #if CRT0_INIT_FPU == TRUE
                 /* FPU FPCCR initialization.*/
-                movw    r0, #CRT0_FPCCR_INIT & 0xFFFF
-                movt    r0, #CRT0_FPCCR_INIT >> 16
+                /* Set FPCCR("Floting-Point Context Control Register") to [ FPCCR_ASPEN | FPCCR_LSPEN ], in order to enable "Lazy Stacking" feature.
+                  FPCCR_ASPEN means "Automatic State Preservation Enable",
+                  FPCCR_LSPEN means "Lazy State Preservation Enable"
+                  
+                  "Lazy Stacking":
+                  - when exception entry/exit occurs, FPU regs will be preserved/restored, except for two situations delow:
+                  - 1. the exception entering will not use FPU;
+                  - 2. the exception exiting did not use FPU ever.
+                */
+                movw    r0, #CRT0_FPCCR_INIT & 0xFFFF   //move a 16-bit value to lower halfWord of r0 (r0[15:0])
+                movt    r0, #CRT0_FPCCR_INIT >> 16      //move a 16-bit value to higher(Top) halfword of r0 (r0[31:16])
                 movw    r1, #SCB_FPCCR & 0xFFFF
                 movt    r1, #SCB_FPCCR >> 16
-                str     r0, [r1]
-                dsb
-                isb
+                str     r0, [r1]  //str Rt, [Rn]: store one word value Rt to memory [Rn].
+                dsb     //Data Synchronization Barrier: do not execute instructions below, until instructions above be executed completely.
+                isb     //Instruction Synchronization Barrier: it is used after the DSB to ensure the processor pipeline is flushed and subsequent instructions are re-fetched.
 
                 /* CPACR initialization.*/
+                /* Set CPACR("CoProcessor Access Control Register") to [ CP11 | CP10 ] = [ 0b1111 ], in order to set FPU (coprocessor) to be "full access".
+
+                  0b00: Access denied. Any attempted access generates a NOCP UsageFault.
+                  0b01: Privileged access only. An unprivileged access generates a NOCP fault.
+                  0b10: Reserved. The result of any access is Unpredictable.
+                  0b11: Full access (Privileged mode and user mode).
+
+                  On the Cortex-M4, the FPU is defined as co-processor 10 and 11. Since there is no other co-processor, 
+                  only CP10 and CP11 are available and both are for the FPU, and they should be writen the same value.
+                */
                 movw    r0, #CRT0_CPACR_INIT & 0xFFFF
                 movt    r0, #CRT0_CPACR_INIT >> 16
                 movw    r1, #SCB_CPACR & 0xFFFF
@@ -192,31 +212,47 @@ Reset_Handler:
 
                 /* FPU FPSCR initially cleared.*/
                 mov     r0, #0
-                vmsr    FPSCR, r0
+                vmsr    FPSCR, r0   //vmsr FPSCR, r0: move to Floating-Point Status Control Register from r0 (Arm Core register).
 
                 /* FPU FPDSCR initially cleared.*/
                 movw    r1, #SCB_FPDSCR & 0xFFFF
                 movt    r1, #SCB_FPDSCR >> 16
-                str     r0, [r1]
+                str     r0, [r1]    //Store r0 = 0x0 to memory [r1] = SCB_FPDSCR
 
                 /* Enforcing FPCA bit in the CONTROL register.*/
-                movs    r0, #CRT0_CONTROL_INIT | CONTROL_FPCA
+                
+                /* Move value [ FPCA | SPSEL | ~nPRIV ] to r0 (ready to move to CONTROL register), 
+                  and update APSR (Application Program Status Register) with N/C/Z bits in it.
+                  (movs = MOVe with Setting flags in APSR)
+
+                  FPCA = Floating-Point Context Active. The Cortex-M4 uses this bit to determine whether 
+                        to preserve floating-point state when processing an exception.
+                  SPSEL = Stack Pointer SELection. 1 = PSP is the current stack pointer.
+                  nPRIV = Thread mode privilege level. 0 = Privileged.
+                */
+                movs    r0, #CRT0_CONTROL_INIT | CONTROL_FPCA   
 
 #else
                 movs    r0, #CRT0_CONTROL_INIT
 #endif
 
                 /* CONTROL register initialization as configured.*/
+
+                /* "After updating the CONTROL register with MSR
+                  instruction, the ISB instruction should be used to
+                  ensure the updated configuration is used for
+                  subsequent operations."
+                */
                 msr     CONTROL, r0
                 isb
 
 #if CRT0_INIT_CORE == TRUE
                 /* Core initialization.*/
-                bl      __core_init
+                bl      __core_init //Actually do nothing.
 #endif
 
                 /* Early initialization.*/
-                bl      __early_init
+                bl      __early_init  //Don't know which function will be executed?
 
 #if CRT0_INIT_STACKS == TRUE
                 ldr     r0, =CRT0_STACKS_FILL_PATTERN
@@ -227,8 +263,8 @@ Reset_Handler:
                 ldr     r2, =__main_stack_end__
 msloop:
                 cmp     r1, r2
-                itt     lo
-                strlo   r0, [r1], #4
+                itt     lo            //itt = "If-Then-True": there will be two following xxxlo instructions being executed when r1 is really lower than r2.
+                strlo   r0, [r1], #4  //Initialize main stack: fill the memory from __main_stack_base__ to __main_stack_end__ with CRT0_STACKS_FILL_PATTERN = 0x55555555.
                 blo     msloop
 
                 /* Process Stack initialization. Note, it assumes that the
@@ -239,7 +275,7 @@ msloop:
 psloop:
                 cmp     r1, r2
                 itt     lo
-                strlo   r0, [r1], #4
+                strlo   r0, [r1], #4  //Initialize process stack.
                 blo     psloop
 #endif
 
@@ -253,7 +289,7 @@ dloop:
                 cmp     r2, r3
                 ittt    lo
                 ldrlo   r0, [r1], #4
-                strlo   r0, [r2], #4
+                strlo   r0, [r2], #4    //Initialize data: transfer data from _textdata to _edata segment (But what do they mean?).
                 blo     dloop
 #endif
 
@@ -266,12 +302,12 @@ dloop:
 bloop:
                 cmp     r1, r2
                 itt     lo
-                strlo   r0, [r1], #4
+                strlo   r0, [r1], #4  //Initialize bss segment: to zeros.
                 blo     bloop
 #endif
 
                 /* Late initialization..*/
-                bl      __late_init
+                bl      __late_init   //Actually do nothing.
 
 #if CRT0_CALL_CONSTRUCTORS == TRUE
                 /* Constructors invocation.*/
@@ -281,7 +317,11 @@ initloop:
                 cmp     r4, r5
                 bge     endinitloop
                 ldr     r1, [r4], #4
-                blx     r1
+                /* blx = Branch and Link with eXchange (to arm instrucion).
+                  Comparing with BL <label>, BLX <Rm> branches indirectly (means jump to somewhere not so obvious),
+                  while BL <label> branches directly with an obvious indicating label.
+                 */
+                blx     r1        //Call every constructor functions listed in __init_array[].
                 b       initloop
 endinitloop:
 #endif

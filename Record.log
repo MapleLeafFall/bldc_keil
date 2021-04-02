@@ -302,5 +302,19 @@ mc_interface_init(&mcconf) ->
 0314：
 1、下次要做的事：
 （1）解决keil工程跑飞的问题：预计16小时；
+a.keil工程的cstarup.s使用了ChibiOS官方给旧版ARM编译器RVCT写的文件（E:\cwq_Code\3_guangyi\VESC\ChibiOS_3.0.2\os\common\ports\ARMCMx\compilers\RVCT\cstartup.s）；
+b.VESC的makefile调用写给GCC ARM编译器的.s文件，所以要对应GCC的来看怎么改为给ARMCC使用（？）：
+    - *.s文件的语法内容在这个文档：D:\gcc-arm-none-eabi-9-2020-q2-update-win32\share\doc\gcc-arm-none-eabi\pdf\as.pdf
+    - 中文参考资料：https://www.huaweicloud.com/articles/c22cfc440a163a12f9afe8125da503c5.html
 （2）尝试keil自带的rtos调试工具：（EventRecorder、SystemView/SystemAnalyzer）；
 （3）不使用keil自带的rtos调试工具，则尝试创建ChibiosStudio工程，来调试代码：预计16小时；
+
+0317：
+1、GCC汇编学习：
+（1）ldr/str：在寄存器和内存之间传递数值：ldr为“内存传到寄存器”，ltr为“寄存器传到内存”；
+（2）mov：把寄存器的数值，或立即数传给寄存器，不能实现内存和寄存器之间的互传；
+（3）.type：对已定义的符号进行声明其类型；如.type Reset_Handler, %function表示“把Reset_Handler补充声明为一个汇编函数”；
+（4）b：无条件跳转（b=branch，分支到本地标签local label）；可以后接其他字母以表示跳转条件，如bcc=“无进位跳转”，bcs=“有进位跳转”；
+（5）定义函数：.section .text.<function>；
+（6）定义变量：16bit的data段：.word <var>；
+（7）
