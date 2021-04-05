@@ -1,6 +1,9 @@
 Objects/
+Listings/
 *.uv*
+!*.uvprojx
 *.bin
 *.hex
 *.lst
 *.map
+*.scvd

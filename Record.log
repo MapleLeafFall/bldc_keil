@@ -318,3 +318,36 @@ b.VESC的makefile调用写给GCC ARM编译器的.s文件，所以要对应GCC的来看怎么改为给ARMC
 （5）定义函数：.section .text.<function>；
 （6）定义变量：16bit的data段：.word <var>；
 （7）
+
+0402:
+1、keil debug跑飞原因定位：
+（1）cstartup.s: IMPORT __main=0x080001C0，但实际一跳转就出错？
+StFoc keil工程的__main()函数（F417）：
+0x08000189 0CF8      LSRS          r0,r7,#19
+0x0800018B 00D0      LSLS          r0,r2,#3
+0x0800018D 7AF0      LDRB          r0,[r6,#0x0B]
+0x0800018F 00F8      LSLS          r0,r7,#3
+0x08000191 0048      LSLS          r0,r1,#1
+0x08000193 4547      CMP           r7,r8
+0x08000195 0068      LSLS          r0,r5,#1
+0x08000197 0808      LSRS          r0,r1,#0
+0x08000199 000F      MOVS          r7,r1
+0x0800019B 0620      LSLS          r0,r4,#24
+0x0800019D 8048      STRH          r0,[r1,#0x02]
+0x0800019F 0647      LSLS          r7,r0,#25
+0x080001A1 0048      LSLS          r0,r1,#1
+0x080001A3 FE47FEE7  CDP2          P14,0x04,pc,C7,C7,0x07
+0x080001A7 FEE7FEE7  CDP2          P14,0x0E,pc,C7,C7,0x07
+0x080001AB FEE7FEE7  CDP2          P14,0x0E,pc,C7,C7,0x07
+0x080001AF FEE7FEE7  CDP2          P14,0x0E,pc,C7,C7,0x07
+0x080001B3 FEE7FEE7  CDP2          P14,0x0E,pc,C7,C7,0x07
+0x080001B7 89E7      LDRH          r7,[r4,#0x0E]
+0x080001B9 0052      LSLS          r2,r2,#1
+0x080001BB 8908      LDRH          r0,[r1,#0x08]
+0x080001BD 0001      MOVS          r1,r0
+（2）各段的存放关系：
+compiler_user_guide.pdf -> 
+    Ch8.4-Default_memory_map ->
+        "The processors that are based on Armv6?M and Armv7?M architectures have fixed memory maps.
+        Having fixed memory maps makes porting software easier between different systems that are based on
+        these processors"
