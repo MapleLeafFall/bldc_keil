@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32F407VGTx</Device>
+          <Device>STM32F405RGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32F4xx_DFP.2.12.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IRAM(0x20000000,0x20000) IRAM2(0x10000000,0x10000) IROM(0x08000000,0x100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F407VGTx$CMSIS\Flash\STM32F4xx_1024.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000 -FP0($$Device:STM32F405RGTx$CMSIS\Flash\STM32F4xx_1024.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32F407VGTx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32F405RGTx$Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32F407VGTx$CMSIS\SVD\STM32F40x.svd</SFDFile>
+          <SFDFile>$$Device:STM32F405RGTx$CMSIS\SVD\STM32F40x.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -80,9 +80,9 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>fromelf --bin --output Objects\VESC.bin Objects\VESC.axf</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -189,12 +189,12 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
-            <RwSelD>3</RwSelD>
+            <RwSelD>4</RwSelD>
             <CodeSel>0</CodeSel>
             <OptFeed>0</OptFeed>
             <NoZi1>0</NoZi1>
@@ -325,7 +325,7 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
@@ -336,8 +336,8 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls>--c99 -USTM32F40_41xxx --gnu</MiscControls>
-              <Define>__heap_base__=Image$$$$RW_IRAM1$$$$ZI$$$$Limit __heap_end__=Image$$$$RW_IRAM2$$$$Base,__FPU_PRESENT=1,__FPU_USED =1,ARM_MATH_CM4,__CC_ARM,HW_VERSION_410</Define>
+              <MiscControls>-USTM32F40_41xxx --gnu</MiscControls>
+              <Define>__heap_base__=Image$$$$RW_IRAM1$$$$ZI$$$$Limit __heap_end__=Image$$$$RW_IRAM2$$$$Base,__FPU_PRESENT=1,__FPU_USED =1,ARM_MATH_CM4,__CC_ARM,HW_VERSION_410, STM32F405xx</Define>
               <Undefine></Undefine>
               <IncludePath>..\VESC;.\ChibiOS_3.0.2\os\common\ports\ARMCMx\devices\STM32F4xx;.\ChibiOS_3.0.2\os\ext\CMSIS\include;.\ChibiOS_3.0.2\os\ext\CMSIS\ST;.\ChibiOS_3.0.2\os\rt\ports\ARMCMx;.\ChibiOS_3.0.2\os\rt\ports\ARMCMx\compilers\RVCT;.\ChibiOS_3.0.2\os\rt\include;.\ChibiOS_3.0.2\os\hal\osal\rt;.\ChibiOS_3.0.2\os\hal\include;.\ChibiOS_3.0.2\os\hal\ports\common\ARMCMx;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\DMAv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\I2Cv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\OTGv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\SPIv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\TIMv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\USBv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\GPIOv2;.\ChibiOS_3.0.2\os\hal\ports\STM32\LLD\USARTv1;.\ChibiOS_3.0.2\os\hal\ports\STM32\STM32F4xx;.\ChibiOS_3.0.2\ext\stdperiph_stm32f4\inc;.\hwconf;.\mcconf;.\applications;.\appconf;.\nrf;.\board</IncludePath>
             </VariousControls>

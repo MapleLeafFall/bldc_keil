@@ -74,8 +74,21 @@ main() ->
                     }
             chSysUnlock();
     hw_init_gpio() -> //hw_410.c：初始化引脚
-    conf_general_init() -> //根据Flash Page0、Page1、e2prom的关系决定如何恢复MCConf和AppConf参数
-        ...
+    conf_general_init() -> //把Flash的sector1/2分别模拟为eeprom page0/1：16kB的0x08004000~0x08007FFFF、16kB的0x08008000~0x0800B000
+        EE_Init() ->
+            VirtAddVarTab[0~79] = EEPROM_BASE_MCCONF + i = [1000~1079];
+            VirtAddVarTab[80~159] = EEPROM_BASE_APPCONF + i = [2000~2079];  //构造虚拟地址映射表（不知道用在哪里？）
+
+            PageStatus0 = (*(__IO uint16_t*)PAGE0_BASE_ADDRESS); //0x08004000: 
+            switch(PageStatus0)
+            {
+                default:
+                    EE_Format() ->
+                        FlashStatus = EE_EraseSectorIfNotEmpty(PAGE0_ID, VOLTAGE_RANGE);
+                        FlashStatus = FLASH_ProgramHalfWord(PAGE0_BASE_ADDRESS, VALID_PAGE);    //擦除page0，并标记为VALID_PAGE
+                        FlashStatus = EE_EraseSectorIfNotEmpty(PAGE1_ID, VOLTAGE_RANGE);        //擦除page1，默认标记为ERASED
+            }
+
     ledpwm_init(); //初始化gamma_table[]数组（LED呼吸灯数组？）
     conf_general_read_mc_configuration(&mcconf); //从e2prom读取电机参数到结构体mcconf
     mc_interface_init(&mcconf) -> //根据电机模式初始化对应的外设、创建线程
@@ -322,7 +335,7 @@ b.VESC的makefile调用写给GCC ARM编译器的.s文件，所以要对应GCC的来看怎么改为给ARMC
 0402:
 1、keil debug跑飞原因定位：
 （1）cstartup.s: IMPORT __main=0x080001C0，但实际一跳转就出错？
-StFoc keil工程的__main()函数（F417）：
+StFoc keil工程的__main()函数（F417VG）：
 0x08000189 0CF8      LSRS          r0,r7,#19
 0x0800018B 00D0      LSLS          r0,r2,#3
 0x0800018D 7AF0      LDRB          r0,[r6,#0x0B]
@@ -345,9 +358,67 @@ StFoc keil工程的__main()函数（F417）：
 0x080001B9 0052      LSLS          r2,r2,#1
 0x080001BB 8908      LDRH          r0,[r1,#0x08]
 0x080001BD 0001      MOVS          r1,r0
-（2）各段的存放关系：
+（2）VESC keil工程的__main()函数（F405RG）：
+0x080001C1 02F0      LSLS          r0,r6,#11
+0x080001C3 00F8      LSLS          r0,r7,#3
+0x080001C5 B6F0      DCW           0x0000
+0x080001C7 0AF8      LSRS          r0,r7,#11
+0x080001C9 90A0      STR           r0,[sp,#0x280]
+0x080001CB 00E8      LSLS          r0,r5,#3
+0x080001CD 820C      STRH          r4,[r1,#0x10]
+0x080001CF 8344      STRH          r4,[r0,#0x1A]
+0x080001D1 AA44      ADD           r2,sp,#0x110
+0x080001D3 01F1      LSLS          r1,r6,#7
+0x080001D5 DA07      BGE           0x080001E7
+0x080001D7 0145      LSLS          r5,r0,#5
+0x080001D9 00D1      LSLS          r1,r2,#3
+0x080001DB ABF0      ADD           r3,sp,#0x3C0
+0x080001DD AFF8      ADD           r7,sp,#0x3E0
+0x080001DF 09F2      LSRS          r2,r6,#7
+0x080001E1 BA0E      REV           r6,r1
+0x080001E3 0FE8      LSRS          r0,r5,#31
+0x080001E5 1300      ASRS          r0,r0,#12
+（3）各段的存放关系：
 compiler_user_guide.pdf -> 
     Ch8.4-Default_memory_map ->
         "The processors that are based on Armv6?M and Armv7?M architectures have fixed memory maps.
         Having fixed memory maps makes porting software easier between different systems that are based on
         these processors"
+（4）对FPU的入栈命令vpush导致跑飞（chcoreasm_v7m.s）：
+应该是FPU初始化没完成。从keil debug的Peripherals->Fault_Reports看到出错时相关的寄存器置位情况：
+SCB->CFSR->NOCP = 1;    //The processor has attempted to access a coprocessor - but the processor does not support coprocessor instructions.
+SCB->HFSR->FORCED = 1;  //The hard fault handler must read the other fault status registers to find the cause of the fault
+SCB->DFSR->HALTED = 1;  //
+（5）编译优化即使为-O0，也会在hal_lld_init()函数跑飞：许多语句汇编为DCD 0xFFFFFFFF，导致UNDEFINSTR错误，即“该架构不支持的指令”，原因未知（？），DCD是RVCT的指令，可能是C代码的写法有问题；
+（6）第一次跑到这里后会跑飞：（32位的是thumb指令集？）
+0x0800612C B510      PUSH          {r4,lr}
+    58:   can_lld_init(); 
+0x0800612E F000F891  BL.W          can_lld_init (0x08006254)
+    59: } 
+    60:  
+    61: /** 
+    62:  * @brief   Initializes the standard part of a @p CANDriver structure. 
+    63:  * 
+    64:  * @param[out] canp     pointer to the @p CANDriver object 
+    65:  * 
+    66:  * @init 
+    67:  */ 
+0x08006132 BD10      POP           {r4,pc}
+    68: void canObjectInit(CANDriver *canp) { 
+    69:  
+0x08006134 B510      PUSH          {r4,lr}
+0x08006136 4604      MOV           r4,r0
+    70:   canp->state    = CAN_STOP; 
+0x08006138 2001      MOVS          r0,#0x01
+0x0800613A 7020      STRB          r0,[r4,#0x00]
+    71:   canp->config   = NULL; 
+
+2、跑飞原因定位：
+（1）需要勾选MicroLib，以配合armcc编译器用于嵌入式系统（因为__main用到C库代码）；
+（2）cstartup.s的IF {CPU} = "Cortex-M4.fp"改为IF {CPU} = "Cortex-M4.fp.sp"，才能正确告诉编译器（armcc<=version6.5）需要使能FPU（因为该.s文件是支持更早版本的RVCT编译器的）；
+（3）main()->conf_general_init()->EE_Init()->EE_Format()->EE_EraseSectorIfNotEmpty()函数把0x08004000起始的（约）4K e2prom擦除为全0xff导致的：创建了两个大数组来占位这些地址，避免存放正常代码；
+（4）
+
+0411：
+1、stm32内部的e2prom从哪里来？用flash的sector来模拟的
+2、代码已不会跑飞，但不知道跑起来后任务的执行内容，led没有闪？

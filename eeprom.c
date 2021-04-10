@@ -34,6 +34,8 @@
 
 /* Global variable used to store variable value in read sequence */
 uint16_t DataVar = 0;
+uint8_t EE_Page0DefaultValue[1024*16]__attribute__((at(PAGE0_BASE_ADDRESS))) = {0x11}; // Reserve 2 pieces of spaces in flash as emulated eeprom, 16kBytes respectively.
+uint8_t EE_Page1DefaultValue[1024*16]__attribute__((at(PAGE1_BASE_ADDRESS))) = {0x22};
 
 /* Virtual address defined by the user: 0xFFFF value is prohibited */
 extern uint16_t VirtAddVarTab[NB_OF_VAR];
@@ -60,7 +62,10 @@ uint16_t EE_Init(void)
 	uint16_t EepromStatus = 0, ReadStatus = 0;
 	int16_t x = -1;
 	uint16_t  FlashStatus;
+	uint8_t tmp;
 
+	tmp = EE_Page0DefaultValue[0];
+	tmp = EE_Page1DefaultValue[0];
 	/* Get Page0 status */
 	PageStatus0 = (*(__IO uint16_t*)PAGE0_BASE_ADDRESS);
 	/* Get Page1 status */
@@ -346,7 +351,7 @@ uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data)
 }
 
 /**
- * @brief  Erases PAGE and PAGE1 and writes VALID_PAGE header to PAGE
+ * @brief  Erases PAGE0 and PAGE1 and writes VALID_PAGE header to PAGE0
  * @param  None
  * @retval Status of the last operation (Flash write or erase) done during
  *         EEPROM formating
@@ -616,8 +621,10 @@ static uint16_t EE_PageTransfer(uint16_t VirtAddress, uint16_t Data)
  * prevent the memory from getting erased in case of unstable voltage at boot.
  */
 static uint16_t EE_EraseSectorIfNotEmpty(uint32_t FLASH_Sector, uint8_t VoltageRange) {
+	// Get a start address of a flash sector by its sector number (0~11 for stm32f405/f407).
 	uint8_t *addr = flash_helper_get_sector_address(FLASH_Sector);
 
+	// Check if the whole sector is 0xff - if not, trigger sector erase (4 kbytes).
 	for (unsigned int i = 0;i < PAGE_SIZE;i++) {
 		if (addr[i] != 0xFF) {
 			return FLASH_EraseSector(FLASH_Sector, VoltageRange);

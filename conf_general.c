@@ -42,6 +42,11 @@ uint16_t VirtAddVarTab[NB_OF_VAR];
 // Private variables
 mc_configuration mcconf, mcconf_old;
 
+/* sizeof(app_configuration) = 160bytes;
+	uint16 VirtAddVarTab[160] = 320bytes = sizeof(app_configuration) * 2;
+	uint16 VirtAddVarTab[0~79] = {1000~1079},
+	uint16 VirtAddVarTab[80~159] = {2000~2079}.
+*/
 void conf_general_init(void) {
 	// First, make sure that all relevant virtual addresses are assigned for page swapping.
 	memset(VirtAddVarTab, 0, sizeof(VirtAddVarTab));
@@ -58,6 +63,27 @@ void conf_general_init(void) {
 	FLASH_Unlock();
 	FLASH_ClearFlag(FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR |
 			FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
+	
+	/* Initialize so-called "eeprom" - that is a special area from 0x08004000 to 0x0800BFFF,
+		equals the second and the third 16-kbyte spaces in flash (16kB * 2 = 32kB).
+
+		0x08004000	| PageStatus0 	|					| = ERASED  	|
+					|	xxxx		|					| = 0xFFFF		|
+		(PAGE0)		|	xxxx		| -- (default) --->	| = 0xFFFF		|
+					|	xxxx		|					| = 0xFFFF		|
+		0x08007FFF	|	xxxx		|					| = 0xFFFF		|
+
+		0x08008000	| PageStatus1 	|					| = VALID_PAGE 	|
+					|	xxxx		|					| = 0xFFFF		|
+		(PAGE1)		|	xxxx		| -- (default) --->	| = 0xFFFF		|
+					|	xxxx		|					| = 0xFFFF		|
+		0x0800BFFF	|	xxxx		|					| = 0xFFFF		|
+	
+		in which PageStatusx can be:
+		#define ERASED                ((uint16_t)0xFFFF)     // Page is empty
+		#define RECEIVE_DATA          ((uint16_t)0xEEEE)     // Page is marked to receive data
+		#define VALID_PAGE            ((uint16_t)0x0000)     // Page containing valid data
+	*/
 	EE_Init();
 }
 
