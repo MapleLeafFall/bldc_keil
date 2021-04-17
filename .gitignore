@@ -7,3 +7,4 @@ Listings/
 *.lst
 *.map
 *.scvd
+*.dbgconf

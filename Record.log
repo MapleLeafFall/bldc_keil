@@ -422,3 +422,29 @@ SCB->DFSR->HALTED = 1;  //
 0411：
 1、stm32内部的e2prom从哪里来？用flash的sector来模拟的
 2、代码已不会跑飞，但不知道跑起来后任务的执行内容，led没有闪？
+（1）通过断点看到在mcpwm.c的utils_sys_unlock_cnt()执行完后os就开始了任务调度，没有走完初始化，导致异常；
+只有用单步调试走完该函数，才可以继续走到下面，原因未知。
+（2）ChibiOS调度器的定时器使用软件定时器，和硬件定时器的关系是：
+OSAL_IRQ_HANDLER(SysTick_Handler) -> //定义systick中断函数为一个任务
+    OSAL_IRQ_PROLOGUE();
+    osalOsTimerHandlerI() ->
+        vtDoTickI() ->
+            vtlist.vt_systime++;
+    OSAL_IRQ_EPILOGUE() ->
+        CH_IRQ_EPILOGUE() ->
+            PORT_IRQ_EPILOGUE() ->
+                _port_irq_epilogue() ->
+                    port_lock_from_isr()
+                    chSchIsPreemptionRequired() //如果当前任务未执行完自己的时间，则继续执行；除非有更高优先级的任务就绪
+                    if (chSchIsPreemptionRequired()) { //根据不同情况决定切换任务的方式
+                        ctxp->pc = (regarm_t)_port_switch_from_isr -> //@chcore_v7m.c
+                            _port_switch_from_isr -> //@chcoreasm_v7m.s
+                                chSchDoReschedule() //任务切换（C函数）
+                    }
+                    else {
+                        ctxp->pc = (regarm_t)_port_exit_from_isr ->
+                            ... //任务切换（汇编）
+                    }
+                    port_unlock_from_isr()
+（3）在mcpwm.c的mcpwm_init()下utils_sys_unlock_cnt()前面附近发生了任务抢占（ctxp->pc = (regarm_t)_port_switch_from_isr）；
+另外在utils_sys_unlock_cnt()里面也发生了第二次抢占，应该是这个原因导致后续的任务调度异常（？）：没继续往下走完初始化就不断发生任务切换。
